@@ -3,20 +3,37 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:password@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:password@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 
 db = SQLAlchemy(app)
 
+
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120))
+    blogs = db.relationship('Blog', backref='owner')
+    
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    #def __repr__(self):
+        #return '<User %r>' % self.username
+
 class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120))
-    post = db.Column(db.String(5000))
+    title = db.Column(db.Text)
+    post = db.Column(db.Text)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, post):
+    def __init__(self, title, post, owner):
         self.title = title
         self.post = post
+        self.owner = owner
 
 
 #@app.route('/blog', methods=['POST', 'GET'])
@@ -49,33 +66,34 @@ def make_new_post():
 @app.route('/newpost', methods=['GET', 'POST'])
 def add_entry():
 
-   # if request.method == 'POST':
-    title_error = ''
-    blog_entry_error = ''
+    if request.method == 'POST':
+        title_error = ''
+        blog_entry_error = ''
 
-    post_title = request.form['blog_title']
-    post_entry = request.form['blog_post']
-    new_post = Blog(post_title, post_entry)
+        post_title = request.form['blog_title']
+        post_entry = request.form['blog_post']
+        new_post = Blog(post_title, post_entry)
+        owner = User.query.filter_by(username=session['username']).first()
 
-    if not is_empty(post_title) and not is_empty(post_entry):
-        db.session.add(new_post)
-        db.session.commit()
-        post_link = "/blog?id=" + str(new_post.id)
-        return redirect(post_link)
-    else:
-        if is_empty(post_title) and is_empty(post_entry):
-            title_error = "Text for blog title is missing."
-            blog_entry_error = "Text for blog entry is missing."
-            return render_template('newpost.html', title_error=title_error, blog_entry_error=blog_entry_error)
-        elif is_empty(post_title) and not is_empty(post_entry):
-            title_error = "Text for blog title is missing."
-            return render_template('newpost.html', title_error=title_error, post_entry=post_entry)
-        elif is_empty(post_entry) and not is_empty(post_title):
-            blog_entry_error = "Text for blog entry is missing."
-            return render_template('newpost.html', blog_entry_error=blog_entry_error, post_title=post_title)
+        if not is_empty(post_title) and not is_empty(post_entry):
+            db.session.add(new_post)
+            db.session.commit()
+            post_link = "/blog?id=" + str(new_post.id)
+            return redirect(post_link)
+        else:
+            if is_empty(post_title) and is_empty(post_entry):
+                title_error = "Text for blog title is missing."
+                blog_entry_error = "Text for blog entry is missing."
+                return render_template('newpost.html', title_error=title_error, blog_entry_error=blog_entry_error)
+            elif is_empty(post_title) and not is_empty(post_entry):
+                title_error = "Text for blog title is missing."
+                return render_template('newpost.html', title_error=title_error, post_entry=post_entry)
+            elif is_empty(post_entry) and not is_empty(post_title):
+                blog_entry_error = "Text for blog entry is missing."
+                return render_template('newpost.html', blog_entry_error=blog_entry_error, post_title=post_title)
 
-    #else: 
-    return render_template('newpost.html')
+    else: 
+        return render_template('newpost.html')
     
 
 @app.route('/', methods=['POST', 'GET'])
