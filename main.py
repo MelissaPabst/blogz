@@ -186,6 +186,12 @@ def add_entry():
 
     else: 
         return render_template('newpost.html')
+
+@app.route('/logout')
+def logout():
+    del session['username']
+    flash("You are logged out.")
+    return redirect('/blog')
     
 
 @app.route('/', methods=['POST', 'GET'])
