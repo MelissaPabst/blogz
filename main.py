@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session
+from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -41,12 +41,12 @@ class Blog(db.Model):
 def login():
     if request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
+        password = request.form['Password']
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
             session['username'] = username
             flash("You are logged in")
-            return redirect('/')
+            return redirect('/newpost')
         else:
             flash("User password incorrect, or user does not exist.")
 
@@ -68,7 +68,7 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
-            return redirect('/')
+            return redirect('/newpost')
         else:
             # TODO user - better response message, maybe
             return '<h2>Sorry, that username is not available.</h2>'
