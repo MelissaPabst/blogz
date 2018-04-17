@@ -81,21 +81,47 @@ def signup():
         password = request.form['Password']
         verify = request.form['VerifyPassword']
 
-        # TODO validate user data
-
+        # query to look for username in db to check if username already registered.
+        # if username not in db, returns none
         existing_user = User.query.filter_by(username=username).first()
+        
+        # check for blank fields
+        if not username or not password or not verify:
+            flash("One or more fields invalid. Fields cannot be blank. Try again.")
+            return render_template('signup.html')
+        
+        # check for matching passwords
+        #if not password==verify:
+            #flash("Passwords must match.")
+            #return render_template('signup.html')
+
+        # check for valid inputs
+        if len(username) < 3:
+            flash("Invalid username. Must be at least three characters.")
+            return render_template('signup.html')
+        if len(password) < 3:
+            flash("Invalid password. Must be at least three characters.")
+            return render_template('signup.html')
+
+        if existing_user:
+            flash("Username already exists.")
+            return render_template('signup.html')
+
+        if not existing_user and not password==verify:
+            flash("Passwords do not match.")
+            return render_template('signup.html')
+
+
+        # add user to db and create session, redirect to newpost
         if not existing_user and password==verify:
             new_user = User(username, password)
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
             return redirect('/newpost')
-        elif not existing_user and not password==verify:
-            flash("Sorry, passwords do not match.")
-        else:
-            # TODO user - better response message, maybe
-            flash("Sorry, that username is not available.")
-
+        
+        
+    # if GET request
     else: 
         return render_template('signup.html')
 
