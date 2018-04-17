@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -7,6 +7,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:password@localhos
 app.config['SQLALCHEMY_ECHO'] = True
 
 db = SQLAlchemy(app)
+app.secret_key = 'aksdfjkaasdfadf'
 
 
 class User(db.Model):
@@ -36,10 +37,52 @@ class Blog(db.Model):
         self.owner = owner
 
 
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            session['username'] = username
+            flash("You are logged in")
+            return redirect('/')
+        else:
+            flash("User password incorrect, or user does not exist.")
+
+    else:
+        return render_template('login.html')
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['Password']
+        verify = request.form['VerifyPassword']
+
+        # TODO validate user data
+
+        existing_user = User.query.filter_by(username=username).first()
+        if not existing_user:
+            new_user = User(username, password)
+            db.session.add(new_user)
+            db.session.commit()
+            session['username'] = username
+            return redirect('/')
+        else:
+            # TODO user - better response message, maybe
+            return '<h2>Sorry, that username is not available.</h2>'
+
+    else: 
+        return render_template('signup.html')
+
+
+
 #@app.route('/blog', methods=['POST', 'GET'])
 #def display_all_posts():
     #all_posts = Blog.query.all()
     #return render_template('blog.html', posts=all_posts)
+
 
 @app.route('/blog')
 def display_indv_post():
