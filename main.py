@@ -5,8 +5,8 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:password@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
-
 db = SQLAlchemy(app)
+# secret_key required for session
 app.secret_key = 'aksdfjkaasdfadf'
 
 
@@ -42,14 +42,35 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['Password']
+
+        # query to match username to username in db, nets first result, unique
+        # if username not in db, returns none
         user = User.query.filter_by(username=username).first()
+
+        # check for blank fields
+        if not username and not password:
+            flash("Username and password cannot be blank. Try again.")
+            return render_template('login.html')
+        if not password:
+            flash("Password cannot be blank. Try again.")
+            return render_template('login.html')
+        if not username:
+            flash("Username cannot be blank. Try again.")
+            return render_template('login.html')
+
+        # check for matching username & password, existing user
         if user and user.password == password:
             session['username'] = username
             flash("You are logged in")
             return redirect('/newpost')
-        else:
-            flash("User password incorrect, or user does not exist.")
+        if user and not user.password == password:
+            flash("Incorrect password. Please try again.")
+            return render_template('login.html')
+        if not user:
+            flash("User does not exist.")
+            return render_template('login.html')
 
+    # if GET request   
     else:
         return render_template('login.html')
 
@@ -63,15 +84,17 @@ def signup():
         # TODO validate user data
 
         existing_user = User.query.filter_by(username=username).first()
-        if not existing_user:
+        if not existing_user and password==verify:
             new_user = User(username, password)
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
             return redirect('/newpost')
+        elif not existing_user and not password==verify:
+            flash("Sorry, passwords do not match.")
         else:
             # TODO user - better response message, maybe
-            return '<h2>Sorry, that username is not available.</h2>'
+            flash("Sorry, that username is not available.")
 
     else: 
         return render_template('signup.html')

@@ -10,6 +10,15 @@
     </header>
     <h1>Build a Blog!</h1>
 
+    
+    {% with messages = get_flashed_messages() %}
+        <ul>
+        {% for message in messages %}
+            <li class="{{category}}">{{message}}</li>
+        </ul>
+        {% endfor %}
+    {% endwith %}
+
     {% block content %}
 
     {% endblock %}
