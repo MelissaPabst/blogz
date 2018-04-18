@@ -202,9 +202,15 @@ def logout():
     return redirect('/blog')
     
 
-@app.route('/', methods=['POST', 'GET'])
-def display_blog():
-    return render_template('blog.html')
+#@app.route('/', methods=['POST', 'GET'])
+#def display_blog():
+    #return render_template('blog.html')
+
+@app.route('/')
+def index():
+    all_users = User.query.distinct()
+    return render_template('index.html', usernames=all_users)
+
 
 
 if __name__ == '__main__':
