@@ -37,6 +37,14 @@ class Blog(db.Model):
         self.owner = owner
 
 
+# endpoint is the name of the view function, not url path. hence routes are '' and not '/'
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'list_blogs', 'index', 'signup']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
+
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -134,7 +142,7 @@ def signup():
 
 
 @app.route('/blog')
-def display_indv_post():
+def list_blogs():
     post_id = request.args.get('id')
     if (post_id):
         indv_post = Blog.query.get(post_id)
@@ -164,8 +172,8 @@ def add_entry():
 
         post_title = request.form['blog_title']
         post_entry = request.form['blog_post']
-        new_post = Blog(post_title, post_entry)
         owner = User.query.filter_by(username=session['username']).first()
+        new_post = Blog(post_title, post_entry, owner)
 
         if not is_empty(post_title) and not is_empty(post_entry):
             db.session.add(new_post)
