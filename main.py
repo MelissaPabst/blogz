@@ -147,8 +147,8 @@ def list_blogs():
     author_id = request.args.get('owner_id')
     all_posts = Blog.query.all()
     if post_id:
-        post = Blog.query.get(post_id)
-        return render_template('indvpost.html', title=post.title, post=post.post, user=post.owner.username)
+        indv_post = Blog.query.get(post_id)
+        return render_template('indvpost.html', posts=indv_post)
     if author_id:
             posts_from_author = Blog.query.filter_by(owner_id=author_id)
             return render_template('indvauthor.html', posts=posts_from_author)
@@ -213,7 +213,12 @@ def logout():
 @app.route('/')
 def index():
     all_users = User.query.distinct()
+    author_id = request.args.get('owner_id')
+    posts_from_author = Blog.query.filter_by(owner_id=author_id)
+    if author_id:
+        return render_template('indvauthor.html', posts=posts_from_author)
     return render_template('index.html', usernames=all_users)
+
 
 
 
