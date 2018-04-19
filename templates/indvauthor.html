@@ -3,9 +3,10 @@
 {% block content %}
 
     {% for blog in posts %}
-    <h2><a href='.blog/?id={{blog.id}}'>{{blog.title}}</a></li></h2>
+    <h2><a href='/blog?id={{blog.id}}'>{{blog.title}}</a></li></h2>
     <p>{{blog.post}}</p>
-    <p>Written by <a href='.blog?owner_id={{blog.owner_id}}'>{{blog.owner.username}}</a></p>
+    
+    <p>Written by <a href='/blog?owner_id={{blog.owner_id}}'>{{blog.owner.username}}</a></p>
     
     {% endfor %}
 </ul>

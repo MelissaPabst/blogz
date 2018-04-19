@@ -145,16 +145,15 @@ def signup():
 def list_blogs():
     post_id = request.args.get('id')
     author_id = request.args.get('owner_id')
+    all_posts = Blog.query.all()
     if post_id:
-        indv_post = Blog.query.get(post_id)
-        return render_template('indvpost.html', indv_post=indv_post)
-    else:
-        if author_id:
+        post = Blog.query.get(post_id)
+        return render_template('indvpost.html', title=post.title, post=post.post, user=post.owner.username)
+    if author_id:
             posts_from_author = Blog.query.filter_by(owner_id=author_id)
             return render_template('indvauthor.html', posts=posts_from_author)
-        else:
-            all_posts = Blog.query.all()
-            return render_template('blog.html', posts=all_posts)
+    
+    return render_template('blog.html', posts=all_posts)
 
 
 def is_empty(x):
