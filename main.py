@@ -141,15 +141,20 @@ def signup():
     #return render_template('blog.html', posts=all_posts)
 
 
-@app.route('/blog')
+@app.route('/blog', methods=['POST', 'GET'])
 def list_blogs():
     post_id = request.args.get('id')
+    author_id = request.args.get('owner_id')
     if (post_id):
         indv_post = Blog.query.get(post_id)
         return render_template('indvpost.html', indv_post=indv_post)
     else:
-        all_posts = Blog.query.all()
-        return render_template('blog.html', posts=all_posts)
+        if (author_id):
+            posts_from_author = Blog.query.filter_by(owner_id=author_id)
+            return render_template('indvauthor.html', posts=posts_from_author)
+        else:
+            all_posts = Blog.query.all()
+            return render_template('blog.html', posts=all_posts)
 
 
 def is_empty(x):
@@ -159,9 +164,9 @@ def is_empty(x):
         return False
 
 
-@app.route('/newpost')
-def make_new_post():
-    return render_template('newpost.html')
+#@app.route('/newpost')
+#def make_new_post():
+    #return render_template('newpost.html')
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def add_entry():
