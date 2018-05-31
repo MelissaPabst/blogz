@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:password@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
@@ -41,8 +41,11 @@ class Blog(db.Model):
 @app.before_request
 def require_login():
     allowed_routes = ['login', 'list_blogs', 'index', 'signup']
-    if request.endpoint not in allowed_routes and 'username' not in session:
+    #if request.endpoint.startswith("/static/") == False and 
+    if request.endpoint not in allowed_routes and 'username' not in session and not request.path.startswith('/static/'):
         return redirect('/login')
+
+
 
 
 @app.route('/login', methods=['POST', 'GET'])
