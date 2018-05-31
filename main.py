@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:password@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
@@ -213,12 +213,11 @@ def logout():
 @app.route('/')
 def index():
     all_users = User.query.distinct()
-    author_id = request.args.get('owner_id')
-    posts_from_author = Blog.query.filter_by(owner_id=author_id)
-    if author_id:
-        return render_template('indvauthor.html', posts=posts_from_author)
+    #author_id = request.args.get('owner_id')
+    #posts_from_author = Blog.query.filter_by(owner_id=author_id)
+    #if author_id:
+        #return render_template('indvauthor.html', posts=posts_from_author)
     return render_template('index.html', usernames=all_users)
-
 
 
 
