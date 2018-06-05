@@ -1,3 +1,122 @@
 body {
+    font-size: 110%;
+    font-family: 'Mina', sans-serif;
+    background-color:lavender;
+    padding-top: 2em;
+}
+
+.container {
+    margin: 0 auto;
+    width: 50%;
+}
+
+form {
+    background-color: white;
+    margin: 0 auto;
+    position: relative;
+    font-size: 1em;
+    line-height: 1.5em;
+    text-decoration: none;
+    border-radius: 4%;
+    padding: 3em;
+    padding-top: 1.5em;
+    border: 1px solid #DDD;
+    border: inset 1px solid #DDD;
+}
+
+.form_label {
+    display: block;
+}
+
+h1 {
+    font-size: 2rem;
+    line-height: 1rem;
+    padding-left: 0.5rem;
+    padding-top: 3rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* submit button */
+
+input {
+    width: 95%;
+    margin: auto;
+    padding: 0.6rem;
+    border: 1px solid black;
+    font-size: 1rem;
+}
+
+textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    width: 100%;
+}
+
+/* error messages */
+
+.error {
+    color: crimson;
+    font-size: 1em;
+    margin-top: 0.5em;
+    line-height: 1em;
+}
+
+.error:last-of-type {
+    margin-bottom: 1.5em;
+}
+
+/* submit button */
+
+.submit { 
+    margin-top: 1em;
+    display: block;
+    width: auto;
+    padding: 0.7em 1em; 
+    background-color: purple;
+    border: 0;
+    color: #FFFFFF; 
+    text-transform: uppercase;
+    font-size: 1em;
+    letter-spacing: 0.1em;
+}
+
+/*navbar code*/
+
+header {
+    position: absolute;
+    left: 0px;
+    height: 100px;
+    width: 100%;
+    text-align: center;
+}
+
+header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: inline-block;
+}
+
+header ul li {
+    float: left;
+}
+
+header ul li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+header ul li a:hover:not(.active) {
+    background-color: lavender;
+}
+
+.active {
     background-color: lavender;
 }

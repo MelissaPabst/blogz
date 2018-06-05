@@ -92,35 +92,46 @@ def signup():
         password = request.form['Password']
         verify = request.form['VerifyPassword']
 
+        username_error = ''
+        password_error = ''
+        password2_error = ''
+
         # query to look for username in db to check if username already registered.
         # if username not in db, returns none
         existing_user = User.query.filter_by(username=username).first()
         
         # check for blank fields
         if not username or not password or not verify:
-            flash("One or more fields invalid. Fields cannot be blank. Try again.")
-            return render_template('signup.html')
+            #flash("One or more fields invalid. Fields cannot be blank. Try again.")
+            username_error = "Username required."
+            return render_template('signup.html', username_error = username_error)
         
         # check for matching passwords
         #if not password==verify:
             #flash("Passwords must match.")
-            #return render_template('signup.html')
+            #password2_error = "Passwords must match."
+            #return render_template('signup.html', password2_error = password2_error)
 
         # check for valid inputs
         if len(username) < 3:
-            flash("Invalid username. Must be at least three characters.")
-            return render_template('signup.html')
+            #flash("Invalid username. Must be at least three characters.")
+            username_error = "Invalid username. Must be at least three characters."
+            return render_template('signup.html', username_error = username_error)
         if len(password) < 3:
-            flash("Invalid password. Must be at least three characters.")
-            return render_template('signup.html')
+            #flash("Invalid password. Must be at least three characters.")
+            password_error = "Invalid password. Must be at least three characters."
+            return render_template('signup.html', password_error = password_error)
 
         if existing_user:
-            flash("Username already exists.")
-            return render_template('signup.html')
+            #flash("Username already exists.")
+            username_error = "Username already exists."
+            return render_template('signup.html', username_error = username_error)
 
         if not existing_user and not password==verify:
-            flash("Passwords do not match.")
-            return render_template('signup.html')
+            #flash("Passwords do not match.")
+            password_error = "Passwords do not match"
+            password2_error = "Passwords do not match"
+            return render_template('signup.html', username = username, password_error = password_error, password2_error = password2_error)
 
 
         # add user to db and create session, redirect to newpost
