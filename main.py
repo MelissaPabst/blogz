@@ -58,16 +58,23 @@ def login():
         # if username not in db, returns none
         user = User.query.filter_by(username=username).first()
 
+        username_error = ''
+        password_error = ''
+
         # check for blank fields
         if not username and not password:
-            flash("Username and password cannot be blank. Try again.")
-            return render_template('login.html')
+            #flash("Username and password cannot be blank. Try again.")
+            username_error = "Username cannot be blank."
+            password_error = "Password cannot be blank."
+            return render_template('login.html', username_error = username_error, password_error = password_error)
         if not password:
-            flash("Password cannot be blank. Try again.")
-            return render_template('login.html')
+            #flash("Password cannot be blank. Try again.")
+            password_error = "Password cannot be blank."
+            return render_template('login.html', password_error = password_error, username = username)
         if not username:
-            flash("Username cannot be blank. Try again.")
-            return render_template('login.html')
+            #flash("Username cannot be blank. Try again.")
+            username_error = "Username cannot be blank."
+            return render_template('login.html', username_error = username_error)
 
         # check for matching username & password, existing user
         if user and user.password == password:
