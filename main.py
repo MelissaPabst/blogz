@@ -179,8 +179,8 @@ def list_blogs():
         indv_post = Blog.query.get(post_id)
         return render_template('indvpost.html', posts=indv_post)
     if author_id:
-            posts_from_author = Blog.query.filter_by(owner_id=author_id)
-            return render_template('indvauthor.html', posts=posts_from_author)
+        posts_from_author = Blog.query.filter_by(owner_id=author_id)
+        return render_template('indvauthor.html', posts=posts_from_author)
     
     return render_template('blog.html', posts=all_posts)
 

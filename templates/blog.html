@@ -4,9 +4,9 @@
     
     {% for blog in posts | sort(attribute='id', reverse = True) %}
         <h2><a href="./blog?id={{blog.id}}">{{blog.title}}</a></h2>
-        <p>Written by <a href='./blog?owner_id={{blog.owner_id}}'>{{blog.owner.username}}</a></p>
-        <p>Posted on: {{ blog.blog-date }}</p>
+        <p>Written by <a href='./blog?owner_id={{blog.owner_id}}'>{{blog.owner.username}}</a> on {{ blog.blog_date }}</p>
         <p>{{blog.post}}</p>
+        
     {% endfor %}
 
    
