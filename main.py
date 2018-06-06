@@ -79,14 +79,16 @@ def login():
         # check for matching username & password, existing user
         if user and user.password == password:
             session['username'] = username
-            flash("You are logged in")
+            #flash("You are logged in")
             return redirect('/newpost')
         if user and not user.password == password:
-            flash("Incorrect password. Please try again.")
-            return render_template('login.html')
+            #flash("Incorrect password. Please try again.")
+            password_error = "Incorrect password. Please try again."
+            return render_template('login.html', password_error = password_error, username = username)
         if not user:
-            flash("User does not exist.")
-            return render_template('login.html')
+            #flash("User does not exist.")
+            username_error = "User does not exist."
+            return render_template('login.html', username_error = username_error)
 
     # if GET request   
     else:
@@ -127,7 +129,7 @@ def signup():
         if len(password) < 3:
             #flash("Invalid password. Must be at least three characters.")
             password_error = "Invalid password. Must be at least three characters."
-            return render_template('signup.html', password_error = password_error)
+            return render_template('signup.html', password_error = password_error, username = username)
 
         if existing_user:
             #flash("Username already exists.")
