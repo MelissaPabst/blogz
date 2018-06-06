@@ -1,8 +1,10 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
+# user:password@server:portNumber/databaseName
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:password@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
@@ -21,20 +23,24 @@ class User(db.Model):
         self.username = username
         self.password = password
 
-    #def __repr__(self):
-        #return '<User %r>' % self.username
 
+
+# relational database established between Blog & User through a foreign key
 class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
     post = db.Column(db.Text)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    blog_date = db.Column(db.DateTime)
 
-    def __init__(self, title, post, owner):
+    def __init__(self, title, post, owner, blog_date=None):
         self.title = title
         self.post = post
         self.owner = owner
+        if blog_date is None:
+            blog_date = datetime.utcnow()
+        self.blog_date = blog_date
 
 
 # endpoint is the name of the view function, not url path. hence routes are '' and not '/'
