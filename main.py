@@ -231,7 +231,7 @@ def add_entry():
 @app.route('/logout')
 def logout():
     del session['username']
-    flash("You are logged out.")
+    #flash("You are logged out.")
     return redirect('/blog')
     
 
