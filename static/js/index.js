@@ -1,14 +1,6 @@
-$(function(){
-    $page = jQuery.url.attr("file");
-    if(!$page) {
-        $page = 'index.html';
-    }
-    $('#navigation li a').each(function(){
-        var $href = $(this).attr('href');
-        if ( ($href == $page) || ($href == '') ) {
-            $(this).addClass('on');
-        } else {
-            $(this).removeClass('on');
-        }
-    });
+
+$(document).ready(function() {
+	if(location.pathname != "/") {
+		$('#nav a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+	} else $('#nav a:eq(0)').addClass('active');
 });

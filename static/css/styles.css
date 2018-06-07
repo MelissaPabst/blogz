@@ -103,6 +103,7 @@ header ul {
     display: inline-block;
 }
 
+
 header ul li {
     float: left;
     background-color: lavender;
@@ -112,14 +113,17 @@ header ul li a {
     display: block;
     color: black;
     text-align: center;
+    background-color: lavender;
     padding: 14px 14px;
     text-decoration: none;
 }
 
 header ul li a:hover:not(.active) {
-    background-color: lavender;
+    background-color: purple;
+    color: white;
 }
 
-/*.active {
+
+.active {
     background-color: white;
-}*/
+}
