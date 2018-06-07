@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h2>Add a Blog Entry</h2>
+    <h2>Share a Story!</h2>
     <form action="/newpost" method="POST">
         <label class="form_label" >
-            Title for your new blog:
+            Title:
             <input type="text" name="blog_title" value="{{post_title}}" />
         </label>
         <p class="error">{{title_error}}</p>
         <label class="form_label" >
-            Your new blog:
+            Your story:
             <textarea name="blog_post" rows="10" cols="100" value="{{post_entry}}">{{post_entry}}</textarea>
         </label>
         <p class="error">{{blog_entry_error}}</p>

@@ -53,7 +53,7 @@ textarea {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-
+    font-size: 16px;
     width: 100%;
 }
 
@@ -81,6 +81,7 @@ textarea {
     border: 0;
     color: #FFFFFF; 
     text-transform: uppercase;
+    font-family: 'Mina', sans-serif;
     font-size: 1em;
     letter-spacing: 0.1em;
 }
@@ -116,6 +117,8 @@ header ul li a {
     background-color: lavender;
     padding: 14px 14px;
     text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 0.1em;
 }
 
 header ul li a:hover:not(.active) {
